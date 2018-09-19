@@ -5,18 +5,24 @@ const path = require('path');
 // required class objects
 const Syringe = require('../lib').Syringe;
 
+// required sibling modules
+const functionMatch = require('./function-match');
+
 module.exports = () => {
   // save a reference to _compile for later use
   let compile = Module.prototype._compile;
   // restructure _compile function by injecting code onto the content string
   Module.prototype._compile = function(content, filename) {
-    let wrapped = shouldWrapContent();
-    if (wrapped) content = wrapContent(content);
-    let displayPath = getDisplayPath(filename);
-    // inject our global function calls into the source code
-    content = Syringe.injectContrast(content, displayPath, wrapped);
-    if (wrapped) content = unwrapContent(content);
-    // use the reference we stored earlier to complete the normal compile process
+    var relPath = path.relative(process.cwd(), filename);
+		if (functionMatch(relPath, ['**/*.js', '!**/node_modules/**'])) {
+      let wrapped = shouldWrapContent();
+      if (wrapped) content = wrapContent(content);
+      let displayPath = getDisplayPath(filename);
+      // inject our global function calls into the source code
+      content = Syringe.injectContrast(content, displayPath, wrapped);
+      if (wrapped) content = unwrapContent(content);
+      // use the reference we stored earlier to complete the normal compile process
+    }
     compile.call(this, content, filename);
   }
 }

@@ -13,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "falafel": "^2.1.0",
-    "idgen": "^2.1.0"
+    "idgen": "^2.1.0",
+    "minimatch": "^3.0.4"
   }
 }
