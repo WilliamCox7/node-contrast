@@ -8,7 +8,7 @@ const Syringe = require('../lib').Syringe;
 // required sibling modules
 const functionMatch = require('./function-match');
 
-module.exports = () => {
+module.exports = (dirname, depth) => {
   // save a reference to _compile for later use
   let compile = Module.prototype._compile;
   // restructure _compile function by injecting code onto the content string
@@ -17,7 +17,7 @@ module.exports = () => {
 		if (functionMatch(relPath, ['**/*.js', '!**/node_modules/**'])) {
       let wrapped = shouldWrapContent();
       if (wrapped) content = wrapContent(content);
-      let displayPath = getDisplayPath(filename);
+      let displayPath = getDisplayPath(filename, dirname, depth);
       // inject our global function calls into the source code
       content = Syringe.injectContrast(content, displayPath, wrapped);
       if (wrapped) content = unwrapContent(content);
@@ -46,9 +46,13 @@ function wrapContent(content) {
 /** @function getDisplayPath trim path for display in output
 */
 
-function getDisplayPath(fn) {
+function getDisplayPath(fn, dirname, depth) {
+  let injectedDirArray = dirname.split('/');
+  let injectedDir = injectedDirArray[injectedDirArray.length-1];
   let pathArray = path.dirname(fn).split('/');
-  return `/${pathArray[pathArray.length-1]}${fn.replace(path.dirname(fn), '')}`;
+  let rootIndex = pathArray.indexOf(injectedDir) - depth;
+  let pathString = pathArray.filter((p, i) => i >= rootIndex ? `/${p}` : '').join('/');
+  return `/${pathString}${fn.replace(path.dirname(fn), '')}`;
 }
 
 /** @function unwrapContent our reference to _compile will wrap the content, so we need to 'unwrap'

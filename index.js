@@ -12,9 +12,9 @@ const setContrastSolution = nodeContrastModules.setContrastSolution;
 
 module.exports = new class NodeContrast {
 
-  inject() {
+  inject(dirname, depth) {
     this.callStack = CallStack;
-    commandeerModuleCompiler.call(this);
+    commandeerModuleCompiler.call(this, dirname, depth);
     setContrastSolution.call(this);
   }
 

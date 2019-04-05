@@ -1,17 +1,12 @@
-module.exports "/test/test.js" (line 3)
-  test1 "/test/test.js" (line 12)
-    test4 "/test/test.js" (line 31)
-    test2 "/test/test.js" (line 23)
-    test2 ts: 0 (line 25)
-  test1 ts: 0 (line 19)
-  test3 "/test/test.js" (line 27)
-  test3 ts: 0 (line 29)
-  module.exports "/test/test2.js" (line 1)
-    test6 "/test/test2.js" (line 5)
-    test6 ts: 0 (line 7)
-  module.exports ts: 0 (line 3)
-module.exports ts: 2 (line 10)
-Anonymous "/test/test.js" (line 6)
-  test5 "/test/test.js" (line 36)
-  test5 ts: 0 (line 38)
-Anonymous ts: 0 (line 8)
+--> "/node-contrast/test/test3.js" @ L1 module.exports()
+  --> "/node-contrast/test/test3.js" @ L3 () =>
+  <-- 0.002s @ L3
+  --> "/node-contrast/test/test3.js" @ L3 () =>
+  <-- 0.001s @ L3
+  --> "/node-contrast/test/test3.js" @ L5 () =>
+    --> "/node-contrast/test/test3.js" @ L13 promise1
+      --> "/node-contrast/test/test3.js" @ L13 promise1
+        --> "/node-contrast/test/test3.js" @ L5 () =>
+          --> "/node-contrast/test/test3.js" @ L13 promise1
+            --> "/node-contrast/test/test3.js" @ L13 promise1
+              --> "/node-contrast/test/test3.js" @ L15 () =>
